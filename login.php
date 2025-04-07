@@ -57,11 +57,13 @@ if (!$recaptcha_json->success) {
 
 // Koneksi database (gunakan PDO untuk keamanan)
 try {
-    $pdo = new PDO('mysql:host=localhost;dbname=your_database;charset=utf8', 'db_username', 'db_password');
-    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-    $pdo->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
+    $pdo = new PDO('mysql:host=sql12.freesqldatabase.com;dbname=sql12771446;charset=utf8', 'sql12771446', 'HUep3PG6mT', [
+        PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+        PDO::ATTR_EMULATE_PREPARES => false,
+        PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC
+    ]);
 } catch (PDOException $e) {
-    die(json_encode(['success' => false, 'message' => 'Koneksi database gagal.']));
+    die(json_encode(['success' => false, 'message' => 'Koneksi database gagal: ' . $e->getMessage()]));
 }
 
 // Validasi input
@@ -77,7 +79,7 @@ $stmt = $pdo->prepare("SELECT id, username, email, password, last_login, failed_
 $stmt->bindParam(':email', $email, PDO::PARAM_STR);
 $stmt->execute();
 
-$user = $stmt->fetch(PDO::FETCH_ASSOC);
+$user = $stmt->fetch();
 
 if (!$user) {
     $_SESSION['login_attempts']++;
