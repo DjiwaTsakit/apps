@@ -13,7 +13,7 @@ if (!isset($_POST['csrf_token']) || $_POST['csrf_token'] !== $_SESSION['csrf_tok
 }
 
 // Validasi reCAPTCHA
-$recaptcha_secret = "6Le9IA0rAAAAAN8poyyUvKjEuNsUNqjAkf49c90G";
+$recaptcha_secret = "6LdpTQ0rAAAAAO2z8d7rhuxlo8L2-AzLaTEL58-5";
 $recaptcha_response = $_POST['g-recaptcha-response'];
 
 $recaptcha_url = 'https://www.google.com/recaptcha/api/siteverify';
