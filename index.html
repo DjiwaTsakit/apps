@@ -1,0 +1,247 @@
+<?php
+session_start();
+// Generate CSRF token
+if (empty($_SESSION['csrf_token'])) {
+    $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
+}
+
+// Set header keamanan
+header("X-Frame-Options: DENY");
+header("X-Content-Type-Options: nosniff");
+header("X-XSS-Protection: 1; mode=block");
+header("Content-Security-Policy: default-src 'self'; script-src 'self' https://apis.google.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: https://www.google.com");
+?>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Secure login and signup page">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+    <link rel="stylesheet" href="/css/style.css">
+    <title>Secure Auth Page</title>
+</head>
+<body>
+    <div class="container d-flex justify-content-center align-items-center min-vh-100">
+        <!-- Login Form (Default) -->
+        <div id="login-form" class="row border rounded-5 p-3 bg-white shadow box-area">
+            <!-- Left Box -->
+            <div class="col-md-6 rounded-4 d-flex justify-content-center align-items-center flex-column left-box">
+                <div class="featured-image mb-3">
+                    <img src="/images/1.png" class="img-fluid" style="width: 250px;" alt="Secure login illustration">
+                </div>
+                <p class="text-white fs-2" style="font-family: 'Courier New', Courier, monospace; font-weight: 600;">Be Verified</p>
+                <small class="text-white text-wrap text-center" style="width: 17rem;font-family: 'Courier New', Courier, monospace;">Join experienced Designers on this platform.</small>
+            </div> 
+            
+            <!-- Right Box -->
+            <div class="col-md-6 right-box">
+                <div class="row align-items-center">
+                    <div class="header-text mb-4">
+                        <h2>Hello, Again</h2>
+                        <p>We are happy to have you back.</p>
+                    </div>
+                    
+                    <!-- Login Form -->
+                    <form action="login.php" method="POST" class="w-100" id="loginForm">
+                        <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars($_SESSION['csrf_token'], ENT_QUOTES); ?>">
+                        
+                        <div class="input-group mb-3">
+                            <input type="email" name="email" class="form-control form-control-lg bg-light fs-6" placeholder="Email address" required
+                                   pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$" title="Masukkan alamat email yang valid">
+                        </div>
+                        <div class="input-group mb-3">
+                            <input type="password" name="password" class="form-control form-control-lg bg-light fs-6" placeholder="Password" required
+                                   minlength="8" title="Password minimal 8 karakter">
+                            <span class="input-group-text toggle-password" style="cursor: pointer;">
+                                <i class="bi bi-eye"></i>
+                            </span>
+                        </div>
+                        
+                        <div class="recaptcha-wrapper ">
+                            <div class="g-recaptcha" data-sitekey="6Le9IA0rAAAAAPfz80CbkMixeKBm-Yg_FlHf8TXG"></div>
+                        </div>
+                        
+                        <!-- Google Button -->
+                        <div class="input-group mb-3">
+                            <button type="button" class="btn btn-lg btn-light w-100 fs-6 google-signin-btn">
+                                <img src="/images/google.png" alt="Google logo" class="google-logo">
+                                Sign in with Google
+                            </button>
+                        </div>
+                        
+                        <div class="input-group mb-3">
+                            <button type="submit" class="btn btn-lg btn-primary w-100 fs-6">Login</button>
+                        </div>
+                    </form>
+                    
+                    <div class="text-center mb-3">
+                        <a href="#forgot-password" class="forgot-password-link">Lupa Password ?</a>
+                    </div>
+                    <div class="row text-center">
+                        <small>Don't have an account? <a href="#" id="show-signup">Sign Up</a></small>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Signup Form (Hidden by default) -->
+        <div id="signup-form" class="row border rounded-5 p-3 bg-white shadow box-area" style="display: none;">
+            <!-- Left Box -->
+            <div class="col-md-6 rounded-4 d-flex justify-content-center align-items-center flex-column left-box">
+                <div class="featured-image mb-3">
+                    <img src="/images/1.png" class="img-fluid" style="width: 250px;" alt="Secure signup illustration">
+                </div>
+                <p class="text-white fs-2" style="font-family: 'Courier New', Courier, monospace; font-weight: 600;">Be Verified</p>
+                <small class="text-white text-wrap text-center" style="width: 17rem;font-family: 'Courier New', Courier, monospace;">Join experienced Designers on this platform.</small>
+            </div> 
+
+            <!-- Right Box -->
+            <div class="col-md-6 right-box">
+                <div class="row align-items-center">
+                    <div class="header-text mb-4">
+                        <h2>Create Account</h2>
+                        <p>Join us to get started.</p>
+                    </div>
+            
+                    <form action="register.php" method="POST" class="w-100" id="signupForm">
+                        <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars($_SESSION['csrf_token'], ENT_QUOTES); ?>">
+                        
+                        <div class="input-group mb-3">
+                            <input type="text" name="username" class="form-control form-control-lg bg-light fs-6" placeholder="Username" required
+                                   pattern="[a-zA-Z0-9_]{3,20}" title="Username harus 3-20 karakter dan hanya boleh mengandung huruf, angka, dan underscore">
+                        </div>
+            
+                        <div class="input-group mb-3">
+                            <input type="email" name="email" class="form-control form-control-lg bg-light fs-6" placeholder="Email address" required
+                                   pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$" title="Masukkan alamat email yang valid">
+                        </div>
+            
+                        <div class="input-group mb-3">
+                            <input type="password" name="password" id="password" class="form-control form-control-lg bg-light fs-6" placeholder="Password" required
+                                   minlength="8" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" 
+                                   title="Password harus mengandung setidaknya satu huruf besar, satu huruf kecil, dan satu angka">
+                            <span class="input-group-text toggle-password" style="cursor: pointer;">
+                                <i class="bi bi-eye"></i>
+                            </span>
+                        </div>
+                        
+                        <div class="input-group mb-3">
+                            <input type="password" name="confirm_password" class="form-control form-control-lg bg-light fs-6" placeholder="Confirm Password" required>
+                        </div>
+                        
+                        <div class="recaptcha-wrapper">
+                            <div class="g-recaptcha" data-sitekey="6Le9IA0rAAAAAPfz80CbkMixeKBm-Yg_FlHf8TXG"></div>
+                        </div>
+                        
+                        <!-- Google Button -->
+                        <div class="input-group mb-3">
+                            <button type="button" class="btn btn-lg btn-light w-100 fs-6 google-signin-btn">
+                                <img src="/images/google.png" alt="Google logo" class="google-logo">
+                                Sign Up with Google
+                            </button>
+                        </div>
+            
+                        <div class="input-group mb-3">
+                            <button type="submit" class="btn btn-lg btn-primary w-100 fs-6">Sign Up</button>
+                        </div>
+                    </form>
+            
+                    <div class="row text-center">
+                        <small>Already have an account? <a href="#" id="show-login">Login</a></small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    
+    <!-- reCAPTCHA API -->
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+    
+    <!-- Password Strength Meter -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/zxcvbn/4.4.2/zxcvbn.js"></script>
+
+    <script>
+        // Toggle between login and signup forms
+        document.getElementById('show-signup').addEventListener('click', function(e) {
+            e.preventDefault();
+            document.getElementById('login-form').style.display = 'none';
+            document.getElementById('signup-form').style.display = 'flex';
+        });
+
+        document.getElementById('show-login').addEventListener('click', function(e) {
+            e.preventDefault();
+            document.getElementById('signup-form').style.display = 'none';
+            document.getElementById('login-form').style.display = 'flex';
+        });
+
+        // Toggle password visibility
+        document.querySelectorAll('.toggle-password').forEach(function(element) {
+            element.addEventListener('click', function() {
+                const input = this.parentElement.querySelector('input');
+                const icon = this.querySelector('i');
+                
+                if (input.type === 'password') {
+                    input.type = 'text';
+                    icon.classList.remove('bi-eye');
+                    icon.classList.add('bi-eye-slash');
+                } else {
+                    input.type = 'password';
+                    icon.classList.remove('bi-eye-slash');
+                    icon.classList.add('bi-eye');
+                }
+            });
+        });
+
+        // Password strength indicator for signup form
+        document.getElementById('password')?.addEventListener('input', function() {
+            const password = this.value;
+            const result = zxcvbn(password);
+            const strength = ['Sangat Lemah', 'Lemah', 'Sedang', 'Kuat', 'Sangat Kuat'][result.score];
+            
+            // Update UI with password strength
+            const strengthElement = document.getElementById('password-strength') || 
+                (function() {
+                    const el = document.createElement('div');
+                    el.id = 'password-strength';
+                    el.className = 'password-strength mt-1';
+                    this.parentElement.appendChild(el);
+                    return el;
+                }).call(this);
+            
+            strengthElement.textContent = `Kekuatan Password: ${strength}`;
+            strengthElement.className = `password-strength mt-1 strength-${result.score}`;
+        });
+
+        // Form validation
+        document.getElementById('signupForm')?.addEventListener('submit', function(e) {
+            const password = this.querySelector('input[name="password"]').value;
+            const confirmPassword = this.querySelector('input[name="confirm_password"]').value;
+            
+            if (password !== confirmPassword) {
+                e.preventDefault();
+                alert('Password dan konfirmasi password tidak cocok');
+                return;
+            }
+            
+            if (grecaptcha.getResponse().length === 0) {
+                e.preventDefault();
+                alert('Silakan verifikasi bahwa Anda bukan robot');
+                return;
+            }
+        });
+
+        document.getElementById('loginForm')?.addEventListener('submit', function(e) {
+            if (grecaptcha.getResponse().length === 0) {
+                e.preventDefault();
+                alert('Silakan verifikasi bahwa Anda bukan robot');
+                return;
+            }
+        });
+    </script>
+</body>
+</html>
