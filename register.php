@@ -1,34 +1,58 @@
 <?php
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
+require 'db.php';
+require 'vendor/autoload.php'; // pastikan sudah install PHPMailer
 
-echo "<h2>Test Halaman Register</h2>";
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
 
-// Coba include register.php
-if (file_exists("register.php")) {
-    echo "✅ File register.php ditemukan.<br>";
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $username = trim($_POST['username']);
+    $email    = trim($_POST['email']);
+    $password = $_POST['password'];
+    $confirm  = $_POST['confirm_password'];
+
+    if ($password !== $confirm) {
+        die("Password dan konfirmasi tidak sama.");
+    }
+
+    $check = $pdo->prepare("SELECT * FROM users WHERE email = ?");
+    $check->execute([$email]);
+
+    if ($check->rowCount() > 0) {
+        die("Email sudah terdaftar.");
+    }
+
+    $hashed_password = password_hash($password, PASSWORD_DEFAULT);
+    $token = bin2hex(random_bytes(16));
+
+    $stmt = $pdo->prepare("INSERT INTO users (username, email, password, verify_token, is_verified) VALUES (?, ?, ?, ?, 0)");
+    $stmt->execute([$username, $email, $hashed_password, $token]);
+
+    // Kirim email verifikasi
+    $mail = new PHPMailer(true);
+    try {
+        $mail->isSMTP();
+        $mail->Host       = 'smtp.gmail.com';
+        $mail->SMTPAuth   = true;
+        $mail->Username   = getenv("EMAIL_USERNAME"); // simpan di .env
+        $mail->Password   = getenv("EMAIL_PASSWORD");
+        $mail->SMTPSecure = 'tls';
+        $mail->Port       = 587;
+
+        $mail->setFrom(getenv("EMAIL_USERNAME"), 'Verifikasi Akun');
+        $mail->addAddress($email, $username);
+        $mail->isHTML(true);
+        $mail->Subject = 'Verifikasi Email';
+
+        $verify_link = "https://nasss.azurewebsites.net/verify.php?email=$email&token=$token";
+        $mail->Body = "Halo $username,<br><br>Klik link berikut untuk verifikasi akun Anda:<br><a href='$verify_link'>$verify_link</a>";
+
+        $mail->send();
+        echo "Pendaftaran berhasil. Silakan cek email untuk verifikasi.";
+    } catch (Exception $e) {
+        echo "Email gagal dikirim. Error: {$mail->ErrorInfo}";
+    }
 } else {
-    echo "❌ File register.php TIDAK ditemukan!<br>";
+    echo "Akses tidak valid.";
 }
-
-// Coba konek ke DB
-try {
-    require 'config/db.php';
-    echo "✅ Koneksi ke database berhasil.<br>";
-} catch (PDOException $e) {
-    echo "❌ Gagal konek database: " . $e->getMessage() . "<br>";
-}
-
-// Coba simulasikan POST
-echo "<h3>Simulasi Kirim POST ke register.php</h3>";
-
-echo '<form method="POST" action="register.php">
-  <input type="text" name="username" placeholder="Username" required>
-  <input type="email" name="email" placeholder="Email" required>
-  <input type="password" name="password" placeholder="Password" required>
-  <input type="password" name="confirm_password" placeholder="Konfirmasi Password" required>
-  <button type="submit">Test Daftar</button>
-</form>';
-
-echo "<br><small>Kalau form ini tampil dan bisa di-submit, kemungkinan besar masalah bukan di routing.</small>";
 ?>
