@@ -1,4 +1,3 @@
-<?php
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 
@@ -7,26 +6,24 @@ require 'vendor/autoload.php';
 $mail = new PHPMailer(true);
 
 try {
-    // Konfigurasi SMTP produksi Mailtrap
+    // Konfigurasi Gmail SMTP
     $mail->isSMTP();
-    $mail->Host       = 'live.smtp.mailtrap.io';
+    $mail->Host       = 'smtp.gmail.com';
     $mail->SMTPAuth   = true;
-    $mail->Username   = 'api'; // atau 'smtp@mailtrap.io'
-    $mail->Password   = '202dc756cdf32b79fa7e4d61c0b9d346'; // Ganti dengan password asli
+    $mail->Username   = 'najibullasror@gmail.com'; // Email Gmail kamu
+    $mail->Password   = 'nzuzamiuvrrrraiy';   // Password Aplikasi (bukan password akun Gmail)
     $mail->SMTPSecure = 'tls';
     $mail->Port       = 587;
 
-    // Siapa yang kirim dan ke siapa
-    $mail->setFrom('noreply@nasss.azurewebsites.net', 'Verifikasi Web');
-    $mail->addAddress('redwordlist@gmail.com', 'Nama Penerima'); // Email nyata
+    $mail->setFrom('redwordlist@gmail.com', 'Nama Kamu');
+    $mail->addAddress('redwordlist@email.com', 'Target');
 
-    // Isi email
     $mail->isHTML(true);
-    $mail->Subject = 'Halo dari Mailtrap Production!';
-    $mail->Body    = 'Selamat! Email ini berhasil dikirim ke <b>dunia nyata</b>.';
+    $mail->Subject = 'Verifikasi Email';
+    $mail->Body    = 'Hai! Ini email verifikasi dari SMTP Gmail.';
 
     $mail->send();
-    echo '✅ Email berhasil dikirim ke email nyata!';
+    echo '✅ Email berhasil dikirim!';
 } catch (Exception $e) {
     echo "❌ Gagal kirim email: {$mail->ErrorInfo}";
 }
