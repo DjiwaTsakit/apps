@@ -1,5 +1,5 @@
 <?php
-require 'db.php';
+require 'config/db.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $username   = trim($_POST['username']);
@@ -26,7 +26,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $subject = "Verifikasi Email Anda";
         $message = "Hai $username, klik link berikut untuk verifikasi email kamu:\n\n";
         $message .= "https://nasss.azurewebsites.net/verify.php?email=$email&token=$token";
-        $headers = "From: noreply@yourdomain.com";
+        $headers = "From: noreply@nasss.azurewebsites.net";
 
         if (mail($email, $subject, $message, $headers)) {
             echo "<script>alert('Registrasi berhasil! Silakan cek email untuk verifikasi.'); window.location.href='index.html';</script>";
