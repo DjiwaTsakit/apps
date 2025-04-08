@@ -25,7 +25,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         // Kirim email verifikasi
         $subject = "Verifikasi Email Anda";
         $message = "Hai $username, klik link berikut untuk verifikasi email kamu:\n\n";
-        $message .= "https://YOURDOMAIN/verify.php?email=$email&token=$token";
+        $message .= "https://nasss.azurewebsites.net/verify.php?email=$email&token=$token";
         $headers = "From: noreply@yourdomain.com";
 
         if (mail($email, $subject, $message, $headers)) {
