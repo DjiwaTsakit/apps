@@ -15,8 +15,8 @@ try {
     $mail->SMTPSecure = 'tls';
     $mail->Port       = 587;
 
-    $mail->setFrom('redwordlist@gmail.com', 'Nama Kamu');
-    $mail->addAddress('redwordlist@email.com', 'Target');
+    $mail->setFrom('najibullasror@gmail.com', 'Nama Kamu');
+    $mail->addAddress('redwordlist@gmail.com', 'Target');
 
     $mail->isHTML(true);
     $mail->Subject = 'Verifikasi Email';
