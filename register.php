@@ -1,33 +1,43 @@
 <?php
 // File: register.php
 
-// Mulai session dengan pengaturan yang lebih aman
+// Mulai session dengan pengaturan yang lebih ketat
 session_start([
-    'cookie_lifetime' => 86400, // 1 hari
-    'cookie_secure'   => true,   // Hanya dikirim melalui HTTPS
-    'cookie_httponly' => true,   // Tidak bisa diakses via JavaScript
-    'use_strict_mode' => true    // Perlindungan session fixation
+    'cookie_lifetime' => 86400,
+    'cookie_secure'   => isset($_SERVER['HTTPS']), // Hanya HTTPS jika tersedia
+    'cookie_httponly' => true,
+    'use_strict_mode' => true
 ]);
 
-// Include koneksi database
-require_once 'config/db.php';
+// Debugging session - bisa dihapus setelah testing
+error_log("Session ID: " . session_id());
+error_log("CSRF Token in Session: " . ($_SESSION['csrf_token'] ?? 'NOT SET'));
 
 // Validasi request method
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-    http_response_code(405); // Method Not Allowed
-    die("Method not allowed");
+    http_response_code(405);
+    die(json_encode(['error' => 'Method not allowed']));
 }
 
-// Validasi CSRF token dengan cara yang lebih aman
-if (!isset($_POST['csrf_token']) || !isset($_SESSION['csrf_token'])) {
-    http_response_code(403); // Forbidden
-    die("CSRF token missing");
+// Validasi CSRF token
+if (!isset($_POST['csrf_token'], $_SESSION['csrf_token'])) {
+    http_response_code(403);
+    die(json_encode([
+        'error' => 'CSRF token missing',
+        'debug' => [
+            'session_token' => $_SESSION['csrf_token'] ?? null,
+            'posted_token' => $_POST['csrf_token'] ?? null
+        ]
+    ]));
 }
 
 if (!hash_equals($_SESSION['csrf_token'], $_POST['csrf_token'])) {
-    http_response_code(403); // Forbidden
-    die("Invalid CSRF token");
+    http_response_code(403);
+    die(json_encode(['error' => 'Invalid CSRF token']));
 }
+// Include koneksi database
+
+require_once 'config/db.php';
 
 // Bersihkan dan validasi input
 $errors = [];
