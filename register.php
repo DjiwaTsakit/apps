@@ -1,36 +1,34 @@
 <?php
-session_start();
-include 'config/db.php'; // Menghubungkan ke database
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
 
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $username = $_POST['username'];
-    $email = $_POST['email'];
-    $password = password_hash($_POST['password'], PASSWORD_DEFAULT); // Hash password
-    $security_question = $_POST['security_question'];
-    $security_answer = $_POST['security_answer'];
-    $token = bin2hex(random_bytes(50)); // Generate token untuk verifikasi
+echo "<h2>Test Halaman Register</h2>";
 
-    // Simpan data pengguna ke database
-    $stmt = $conn->prepare("INSERT INTO users (username, email, password, security_question, security_answer, token, is_verified) VALUES (?, ?, ?, ?, ?, ?, 0)");
-    $stmt->bind_param("sssssss", $username, $email, $password, $security_question, $security_answer, $token);
-    
-    if ($stmt->execute()) {
-        // Kirim email verifikasi
-        $to = $email;
-        $subject = "Verifikasi Email";
-        $message = "Klik link berikut untuk memverifikasi email Anda: ";
-        $message .= "http://nasss.azurewebsites.net/verify.php?token=" . $token; // Ganti dengan domain Anda
-        $headers = "From: no-reply@nasss.azurewebsites.net";
-
-        mail($to, $subject, $message, $headers);
-
-        echo "Pendaftaran berhasil! Silakan cek email Anda untuk verifikasi.";
-    } else {
-        echo "Error: " . $stmt->error;
-    }
-
-    $stmt->close();
+// Coba include register.php
+if (file_exists("register.php")) {
+    echo "✅ File register.php ditemukan.<br>";
+} else {
+    echo "❌ File register.php TIDAK ditemukan!<br>";
 }
 
-$conn->close();
+// Coba konek ke DB
+try {
+    require 'config/db.php';
+    echo "✅ Koneksi ke database berhasil.<br>";
+} catch (PDOException $e) {
+    echo "❌ Gagal konek database: " . $e->getMessage() . "<br>";
+}
+
+// Coba simulasikan POST
+echo "<h3>Simulasi Kirim POST ke register.php</h3>";
+
+echo '<form method="POST" action="register.php">
+  <input type="text" name="username" placeholder="Username" required>
+  <input type="email" name="email" placeholder="Email" required>
+  <input type="password" name="password" placeholder="Password" required>
+  <input type="password" name="confirm_password" placeholder="Konfirmasi Password" required>
+  <button type="submit">Test Daftar</button>
+</form>';
+
+echo "<br><small>Kalau form ini tampil dan bisa di-submit, kemungkinan besar masalah bukan di routing.</small>";
 ?>
