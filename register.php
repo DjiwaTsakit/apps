@@ -19,8 +19,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $to = $email;
         $subject = "Verifikasi Email";
         $message = "Klik link berikut untuk memverifikasi email Anda: ";
-        $message .= "http://yourdomain.com/verify.php?token=" . $token; // Ganti dengan domain Anda
-        $headers = "From: no-reply@yourdomain.com";
+        $message .= "http://nasss.azurewebsites.net/verify.php?token=" . $token; // Ganti dengan domain Anda
+        $headers = "From: no-reply@nasss.azurewebsites.net";
 
         mail($to, $subject, $message, $headers);
 
