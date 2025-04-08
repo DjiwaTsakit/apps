@@ -43,18 +43,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         $mail = new PHPMailer(true);
 
-        // Konfigurasi SMTP Gmail
-        $mail->isSMTP();
-        $mail->Host = 'smtp.gmail.com';
-        $mail->SMTPAuth = true;
-        $mail->Username = 'najibullasror@gmail.com';
-        $mail->Password = 'yjfrgdjnkryiwab'; // Password aplikasi dari Gmail
-        $mail->SMTPSecure = 'tls';
-        $mail->Port = 587;
+// Load dotenv (harus sudah ada sebelumnya)
+$dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
+$dotenv->load();
 
-        $mail->setFrom('najibullasror@gmail.com', 'Verify System');
-        $mail->addAddress($email, $username);
+// Konfigurasi SMTP Gmail
+$mail->isSMTP();
+$mail->Host       = $_ENV['MAIL_HOST'];
+$mail->SMTPAuth   = true;
+$mail->Username   = $_ENV['MAIL_USERNAME'];
+$mail->Password   = $_ENV['MAIL_PASSWORD']; // App Password Gmail
+$mail->SMTPSecure = 'tls';
+$mail->Port       = $_ENV['MAIL_PORT'];
 
+$mail->setFrom($_ENV['MAIL_FROM'], $_ENV['MAIL_FROM_NAME']);
+$mail->addAddress($email, $username); // Tujuan
         $mail->isHTML(true);
         $mail->Subject = 'Verifikasi Email';
         $mail->Body = "Klik link berikut untuk verifikasi email Anda: <a href='$verify_link'>$verify_link</a>";
