@@ -1,5 +1,5 @@
 <?php
-require 'db.php';
+require 'config/db.php';
 
 if (isset($_GET['email']) && isset($_GET['token'])) {
     $email = $_GET['email'];
