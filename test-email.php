@@ -1,31 +1,32 @@
 <?php
-require_once __DIR__ . '/vendor/autoload.php';
-
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
+
+require 'vendor/autoload.php';
 
 $mail = new PHPMailer(true);
 
 try {
-    // Konfigurasi SMTP Mailtrap
+    // Konfigurasi SMTP produksi Mailtrap
     $mail->isSMTP();
-    $mail->Host = 'sandbox.smtp.mailtrap.io';
-    $mail->SMTPAuth = true;
-    $mail->Username = 'ff77ba2c954116'; // Ganti dengan username Mailtrap kamu
-    $mail->Password = '8846831a1fbce7'; // Ganti dengan password asli Mailtrap kamu
-    $mail->SMTPSecure = 'tls'; // atau 'ssl'
-    $mail->Port = 587; // Bisa juga 2525 atau 465
+    $mail->Host       = 'live.smtp.mailtrap.io';
+    $mail->SMTPAuth   = true;
+    $mail->Username   = 'api'; // atau 'smtp@mailtrap.io'
+    $mail->Password   = '202dc756cdf32b79fa7e4d61c0b9d346'; // Ganti dengan password asli
+    $mail->SMTPSecure = 'tls';
+    $mail->Port       = 587;
 
-    // Dari siapa dan ke siapa
-    $mail->setFrom('no-reply@nasss.azurewebsites.net', 'Mailtrap Tester');
-    $mail->addAddress('redwordlist@nasss.azurewebsites.net', 'Test Recipient'); // Email fiktif, Mailtrap gak kirim ke dunia nyata
+    // Siapa yang kirim dan ke siapa
+    $mail->setFrom('noreply@nasss.azurewebsites.net', 'Verifikasi Web');
+    $mail->addAddress('redwordlist@gmail.com', 'Nama Penerima'); // Email nyata
 
+    // Isi email
     $mail->isHTML(true);
-    $mail->Subject = 'Testing Mailtrap';
-    $mail->Body    = 'Halo! Ini adalah <b>test email</b> dari PHPMailer via Mailtrap.';
+    $mail->Subject = 'Halo dari Mailtrap Production!';
+    $mail->Body    = 'Selamat! Email ini berhasil dikirim ke <b>dunia nyata</b>.';
 
     $mail->send();
-    echo '✅ Email berhasil dikirim ke Mailtrap!';
+    echo '✅ Email berhasil dikirim ke email nyata!';
 } catch (Exception $e) {
     echo "❌ Gagal kirim email: {$mail->ErrorInfo}";
 }
