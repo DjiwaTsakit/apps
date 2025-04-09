@@ -16,14 +16,18 @@ if (isset($_GET['token']) && isset($_GET['email'])) {
         $update = $conn->prepare("UPDATE users SET is_verified = 1, verify_token = NULL WHERE email = ?");
         $update->bind_param("s", $email);
         if ($update->execute()) {
-            echo "<h2 style='color:green;'>✅ Email kamu sudah diverifikasi!</h2>";
+            header("Location: v2/success.html");
+            exit;
         } else {
-            echo "<h2 style='color:red;'>❌ Gagal memperbarui status verifikasi.</h2>";
+            header("Location: v2/verify_failed.html");
+            exit;
         }
     } else {
-        echo "<h2 style='color:red;'>❌ Token tidak valid atau sudah digunakan.</h2>";
+        header("Location: v2/verify_failed.html");
+        exit;
     }
 } else {
-    echo "<h2 style='color:red;'>❌ Permintaan tidak valid.</h2>";
+    header("Location: v2/verify_failed.html");
+    exit;
 }
 ?>
