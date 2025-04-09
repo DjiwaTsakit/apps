@@ -40,15 +40,15 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                 $mail->Body = "Klik link ini untuk verifikasi akunmu:\n\n$verifyLink";
 
                 $mail->send();
-                header("Location: verify_success.html");
+                header("Location: v2/verify_success.html");
                 exit;
             } catch (Exception $e) {
-                header("Location: verify_failed.html");
+                header("Location: v2/verify_failed.html");
                 exit;
             }
         }
     } else {
-                header("Location: verify_failed.html");
+                header("Location: v2/verify_failed.html");
                 exit;
     }
 }
