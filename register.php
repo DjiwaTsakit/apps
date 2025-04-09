@@ -9,8 +9,8 @@ error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
 // Konfigurasi Email (gunakan Mailtrap Production atau Gmail)
-$emailSender = 'najibullasror@gmail.com'; // ganti kalau pakai Gmail
-$emailPassword = 'nzuzamiuvrrrraiy'; // password aplikasi Gmail atau Mailtrap live
+$emailSender = 'redwordlist@gmail.com'; // ganti kalau pakai Gmail
+$emailPassword = 'wzluxmvskspthkkm'; // password aplikasi Gmail atau Mailtrap live
 $emailSMTPHost = 'smtp.gmail.com'; // atau smtp.gmail.com
 $emailSMTPPort = 587;
 
