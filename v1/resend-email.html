@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kirim Ulang Verifikasi</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f0f4ff;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .container {
+            background-color: white;
+            border-radius: 16px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            width: 400px;
+            padding: 40px;
+            text-align: center;
+            border-top: 6px solid #0d47a1;
+        }
+
+        h1 {
+            color: #0d47a1;
+            margin-bottom: 20px;
+            font-size: 24px;
+        }
+
+        p {
+            color: #555;
+            margin-bottom: 25px;
+            line-height: 1.5;
+        }
+
+        input[type="email"] {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            font-size: 14px;
+        }
+
+        button {
+            background-color: #0d47a1;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            font-size: 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            width: 100%;
+        }
+
+        button:hover {
+            background-color: #08306b;
+        }
+
+        .back-link {
+            display: block;
+            margin-top: 20px;
+            font-size: 14px;
+            color: #0d47a1;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .back-link:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Kirim Ulang Verifikasi</h1>
+        <p>Masukkan email yang telah kamu gunakan saat mendaftar. Kami akan mengirimkan ulang tautan verifikasi.</p>
+
+        <form action="proses_kirim_ulang.php" method="POST">
+            <input type="email" name="email" placeholder="Alamat Email" required>
+            <button type="submit">Kirim Ulang</button>
+        </form>
+
+        <a href="/login.html" class="back-link">Kembali ke Login</a>
+    </div>
+</body>
+</html>
