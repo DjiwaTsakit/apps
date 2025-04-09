@@ -52,7 +52,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             $mail->Body = "<h3>Halo, $username!</h3><p>Klik link berikut untuk verifikasi akunmu:</p><a href='$verifyLink'>$verifyLink</a>";
 
             $mail->send();
-            header("Location: alert_success.html"); // redirect ke halaman sukses (bisa kamu buat)
+            header("Location: /v1/success.html"); // redirect ke halaman sukses (bisa kamu buat)
             exit;
         } catch (Exception $e) {
             echo "❌ Gagal kirim email: {$mail->ErrorInfo}";
