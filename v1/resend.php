@@ -29,11 +29,11 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                 $mail->Host = 'smtp.gmail.com';
                 $mail->SMTPAuth = true;
                 $mail->Username = 'redwordlist@gmail.com';
-                $mail->Password = 'PASSWORD_APLIKASI';
+                $mail->Password = 'wzluxmvskspthkkm';
                 $mail->SMTPSecure = 'tls';
                 $mail->Port = 587;
 
-                $mail->setFrom('EMAIL_KAMU@gmail.com', 'Verifikasi Ulang');
+                $mail->setFrom('no-replay@gmail.com', 'Verifikasi Ulang');
                 $mail->addAddress($email, $username);
                 $mail->Subject = "Kirim Ulang Verifikasi";
                 $mail->Body = "Klik link ini untuk verifikasi akunmu:\n\n$verifyLink";
