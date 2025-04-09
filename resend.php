@@ -16,7 +16,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
     if ($result && $row = $result->fetch_assoc()) {
         if ($row['is_verified']) {
-            echo "✅ Email sudah diverifikasi.";
+            header("Location: verify_success.html");
+            exit;
         } else {
             $username = $row['username'];
             $token = $row['verify_token'];
