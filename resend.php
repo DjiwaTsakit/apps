@@ -16,7 +16,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
     if ($result && $row = $result->fetch_assoc()) {
         if ($row['is_verified']) {
-            header("Location: verify_success.html");
+            header("Location: v2/verify_success.html");
             exit;
         } else {
             $username = $row['username'];
