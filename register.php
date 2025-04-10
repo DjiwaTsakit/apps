@@ -48,8 +48,44 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             $mail->setFrom($emailSender, 'Register Bot');
             $mail->addAddress($email, $username);
             $mail->isHTML(true);
-            $mail->Subject = "Verifikasi Akunmu";
-            $mail->Body = "<h3>Halo, $username!</h3><p>Klik link berikut untuk verifikasi akunmu:</p><a href='$verifyLink'>$verifyLink</a>";
+$mail->Subject = "Verifikasi Akun Anda - Lab Pentest";
+$mail->Body = "
+    <html>
+    <head>
+        <style>
+            body { font-family: Arial, sans-serif; color: #333; }
+            .container { max-width: 600px; margin: auto; padding: 20px; border: 1px solid #ddd; border-radius: 8px; }
+            .btn {
+                display: inline-block;
+                padding: 10px 20px;
+                margin-top: 20px;
+                background-color: #007BFF;
+                color: white;
+                text-decoration: none;
+                border-radius: 5px;
+            }
+            .footer {
+                margin-top: 40px;
+                font-size: 12px;
+                color: #888;
+            }
+        </style>
+    </head>
+    <body>
+        <div class='container'>
+            <h2>Halo, $username!</h2>
+            <p>Terima kasih telah mendaftar di <strong>Lab Pentest</strong>.</p>
+            <p>Untuk mengaktifkan akun Anda, silakan klik tombol di bawah ini:</p>
+            <a href='$verifyLink' class='btn'>Verifikasi Akun</a>
+            <p>Jika tombol di atas tidak berfungsi, Anda juga dapat menyalin dan menempelkan tautan berikut ke peramban Anda:</p>
+            <p><a href='$verifyLink'>$verifyLink</a></p>
+            <div class='footer'>
+                <p>Email ini dikirim secara otomatis. Mohon tidak membalas pesan ini.</p>
+                <p>&copy; ".date('Y')." [Nama Aplikasi Anda]. All rights reserved.</p>
+            </div>
+        </div>
+    </body>
+    </html>";
 
             $mail->send();
             header("Location: v2/success.html"); // redirect ke halaman sukses (bisa kamu buat)
