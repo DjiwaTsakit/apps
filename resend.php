@@ -36,6 +36,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
                 $mail->setFrom('no-replay@gmail.com', 'Verifikasi Ulang');
                 $mail->addAddress($email, $username);
+                $mail->isHTML(true);
 $mail->Subject = "Verifikasi Akun Anda - Lab Pentest";
 $mail->Body = "
 <html>
